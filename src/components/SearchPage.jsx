@@ -7,6 +7,35 @@ import { SORT_ASCENDING, SORT_DESCENDING } from './ProfilesContextProvider';
 import ErrorBanner from './ErrorBanner';
 import LoadingBanner from './LoadingBanner';
 import { fetchProfiles } from '../utils';
+import styled from 'styled-components';
+
+const StyledMain = styled.main`
+  margin: 24px;
+`;
+
+const ActionButtonsGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const StyledGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 16px;
+  @media (max-width: 1280px) and (min-width: 950px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (max-width: 949.95px) and (min-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 599.95px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const StyledImage = styled.img`
+  width: 22px;
+`;
 
 class SearchPage extends React.Component {
   static contextType = ProfileContext;
@@ -28,34 +57,26 @@ class SearchPage extends React.Component {
 
   renderContent = () => {
     const { profiles = [], isLoading, error } = this.context;
-
     if (isLoading) return <LoadingBanner />;
 
     if (error) return <ErrorBanner message={error} />;
 
     return (
-      <main style={{ margin: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <StyledMain>
+        <ActionButtonsGroup>
           <MinimalButton disabled>
-            <img src="filter.svg" width={22} alt="filter" />
+            <StyledImage src="filter.svg" alt="filter" />
           </MinimalButton>
-
           <MinimalButton onClick={this.handleSortAscending}>
-            <img src="./ascending.svg" width={22} alt="Sort ascending" />
+            <StyledImage src="./ascending.svg" alt="Sort ascending" />
           </MinimalButton>
 
           <MinimalButton onClick={this.handleSortDescending}>
-            <img src="./descending.svg" width={22} alt="Sort descending" />
+            <StyledImage src="./descending.svg" alt="Sort descending" />
           </MinimalButton>
-        </div>
+        </ActionButtonsGroup>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr 1fr',
-            gridGap: '16px',
-          }}
-        >
+        <StyledGrid>
           {profiles.map((profile, index) => (
             <SearchCard
               key={index}
@@ -67,8 +88,8 @@ class SearchPage extends React.Component {
               photoCount={profile.photoCount}
             />
           ))}
-        </div>
-      </main>
+        </StyledGrid>
+      </StyledMain>
     );
   };
 

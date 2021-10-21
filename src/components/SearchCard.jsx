@@ -1,18 +1,74 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-const styles = {
-  card: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatar: {
-    position: 'relative',
-    width: '200px',
-    height: '200px',
-  },
-};
+const CardWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AvatarWrapper = styled.div`
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px lightgray, 0 3px 6px;
+  overflow: hidden;
+  position: relative;
+  width: 200px;
+  height: 200px;
+`;
+
+const DetailsDiv = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  border-radius: inherit;
+  overflow: hidden;
+`;
+
+const DetailsFlexOutterWrapper = styled.div`
+  margin: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+`;
+
+const DetailsFlexInnerWrapper = styled.div`
+  color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const StyledH6 = styled.h6`
+  font-size: 16px;
+`;
+
+const HandleWrapper = styled.div`
+  display: flex;
+  margin-bottom: 4px;
+  align-items: center;
+`;
+
+const BottomDetailsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`;
+
+const AgeAndLocationWrapper = styled.div`
+  display: flex;
+  margin-bottom: 4px;
+  align-items: center;
+`;
+
+const PhotoCountWrapper = styled.div`
+  display: inline-block;
+  height: 15px;
+  margin-right: 4px;
+  color: white;
+`;
 
 export default class Search extends React.PureComponent {
   render() {
@@ -26,82 +82,28 @@ export default class Search extends React.PureComponent {
     } = this.props;
 
     return (
-      <div style={styles.card}>
+      <CardWrapper>
         <Link to={`/${profileId}`}>
-          <div
-            style={{
-              border: '1px solid lightgray',
-              borderRadius: 8,
-              boxShadow: '0 3px 6px lightgray, 0 3px 6px',
-              overflow: 'hidden',
-            }}
-          >
-            <div style={styles.avatar}>
-              <img src={photoUrl} alt="potential date"></img>
-              <div
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  bottom: '0',
-                  borderRadius: 'inherit',
-                  overflow: 'hidden',
-                }}
-              >
-                <div
-                  style={{
-                    margin: 8,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                    position: 'relative',
-                  }}
-                >
-                  <div
-                    style={{
-                      color: 'white',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: '100%',
-                    }}
-                  >
-                    <h6 style={{ fontSize: '16px ' }}>
-                      <div style={{ display: 'flex', marginBottom: '4px', alignItems: 'center' }}>
-                        {handle}
-                      </div>
-                    </h6>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          marginBottom: '4px',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span>{location ? `${age} • ${location}` : age}</span>
-                      </div>
-                      <div style={{ display: 'inline-block', height: '15px' }}>
-                        {photoCount > 1 && (
-                          <div>
-                            <div style={{ marginRight: '4px' }}>
-                              <span color="white">{photoCount}</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <AvatarWrapper>
+            <img src={photoUrl} alt="potential date"></img>
+            <DetailsDiv>
+              <DetailsFlexOutterWrapper>
+                <DetailsFlexInnerWrapper>
+                  <StyledH6>
+                    <HandleWrapper>{handle}</HandleWrapper>
+                  </StyledH6>
+                  <BottomDetailsWrapper>
+                    <AgeAndLocationWrapper>
+                      {location ? `${age} • ${location}` : age}
+                    </AgeAndLocationWrapper>
+                    <PhotoCountWrapper>{photoCount > 1 && `${photoCount}`}</PhotoCountWrapper>
+                  </BottomDetailsWrapper>
+                </DetailsFlexInnerWrapper>
+              </DetailsFlexOutterWrapper>
+            </DetailsDiv>
+          </AvatarWrapper>
         </Link>
-      </div>
+      </CardWrapper>
     );
   }
 }
