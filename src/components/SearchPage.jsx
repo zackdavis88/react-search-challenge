@@ -56,9 +56,10 @@ class SearchPage extends React.Component {
             gridGap: '16px',
           }}
         >
-          {profiles.map((profile) => (
+          {profiles.map((profile, index) => (
             <SearchCard
-              key={profile.id}
+              key={index}
+              profileId={profile.id}
               photoUrl={profile.photoUrl}
               handle={profile.handle}
               location={profile.location}
