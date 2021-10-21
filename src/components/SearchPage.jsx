@@ -8,6 +8,7 @@ import ErrorBanner from './ErrorBanner';
 import LoadingBanner from './LoadingBanner';
 import { fetchProfiles } from '../utils';
 import styled from 'styled-components';
+import RefreshTimer from './RefreshTimer';
 
 const StyledMain = styled.main`
   margin: 24px;
@@ -63,6 +64,10 @@ class SearchPage extends React.Component {
 
     return (
       <StyledMain>
+        <ActionButtonsGroup>
+          <RefreshTimer />
+        </ActionButtonsGroup>
+
         <ActionButtonsGroup>
           <MinimalButton disabled>
             <StyledImage src="filter.svg" alt="filter" />
