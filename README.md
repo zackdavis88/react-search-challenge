@@ -1,5 +1,32 @@
 # React Challenge
 
+## Developer Note
+
+1. This app relies on any public JSON API that can return a response in the following format:
+
+```
+{
+  "profiles": [{
+    "photoUrl": STRING,
+    "handle": STRING,
+    "location": STRING,
+    "age": NUMBER,
+    "photoCount": NUMBER,
+    "id": NUMBER
+  }]
+}
+```
+
+2. You can configure the API url that the application uses by modifying the **_apiconfig.json_** file found in the _src_ directory.
+
+3. I used [JSONBIN.io](https://jsonbin.io/) to host the JSON API that returns profiles. I found that if you hit one of their free APIs with too many requests they
+shut it down, so if the project is getting a bad response from the API then try updating apiconfig.json with one of these alternative routes:
+
+  * https://api.jsonbin.io/b/617215974a82881d6c63bd15
+  * https://api.jsonbin.io/b/6172160daa02be1d445cfe0a
+  * https://api.jsonbin.io/b/61721625aa02be1d445cfe13
+
+
 ## Tasks
 
 1. Modify the current app to replace the profiles pulled from the static JSON file with data pulled from a live api. This should be a public api.
