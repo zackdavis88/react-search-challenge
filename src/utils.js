@@ -4,13 +4,14 @@ import {
   PROFILES_FAILURE,
   REFRESH_PROFILES,
 } from './components/ProfilesContextProvider';
+import { apiUrl } from './apiconfig.json';
 
 export const fetchProfiles = async (profileContext, isRefresh = false) => {
   // for a better feeling experience, lets not fire the request action for refreshes.
   if (!isRefresh) {
     profileContext.dispatch({ type: PROFILES_REQUESTED });
   }
-  const response = await fetch('https://api.jsonbin.io/b/617169269548541c29c67120');
+  const response = await fetch(apiUrl);
   if (response.status !== 200) return profileContext.dispatch({ type: PROFILES_FAILURE });
 
   const body = await response.json();
