@@ -15,7 +15,7 @@ export const fetchProfiles = async (profileContext, isRefresh = false) => {
   if (response.status !== 200) return profileContext.dispatch({ type: PROFILES_FAILURE });
 
   const body = await response.json();
-  // Fire off a dispatch to populate the store.
+  // Fire off a dispatch to populate or refresh the store.
   return profileContext.dispatch({
     type: isRefresh ? REFRESH_PROFILES : PROFILES_SUCCESS,
     profiles: body.profiles || [],

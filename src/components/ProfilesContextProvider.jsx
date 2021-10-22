@@ -48,7 +48,7 @@ function ProfilesReducer(state, action) {
         ...state,
         isLoading: false,
         profiles: [],
-        error: 'Something went wrong',
+        error: 'Something went wrong while fetching from the API',
       };
     case SORT_ASCENDING:
       profiles = [...state.profiles];

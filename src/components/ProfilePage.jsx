@@ -70,6 +70,14 @@ const ProfilePage = (props) => {
   const { profileId } = useParams();
 
   useEffect(() => {
+    /* NOTES ON THIS LOGIC
+       
+      This logic makes some assumptions about the profiles data that we are using. It assumes that the data is a complete list of all profiles,
+      if a user is not contained in the array then they do not exist.
+
+      In a real world application: this is a bad assumption because the API could be paginated and returning just a subset of all profiles. We
+      would probably update this logic to fetch the individual profile via API call instead of pulling an individual profile out of the profiles array.
+    */
     const { profiles } = profileContext;
     if (!profiles || !profiles.length) {
       return fetchProfiles(profileContext);
