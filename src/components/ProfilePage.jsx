@@ -22,12 +22,8 @@ const ProfileImage = styled.img`
   border: 1px solid lightgray;
   border-radius: 8px;
   box-shadow: 0 3px 6px lightgray, 0 3px 6px;
-  @media (max-width: 800px) and (min-width: 600px) {
-    width: 650px;
-  }
   @media (max-width: 599.95px) {
     max-width: 360px;
-    max-height: 360px;
     width: 100%;
     min-width: 0;
   }
@@ -76,7 +72,10 @@ const ProfilePage = (props) => {
       if a user is not contained in the array then they do not exist.
 
       In a real world application: this is a bad assumption because the API could be paginated and returning just a subset of all profiles. We
-      would probably update this logic to fetch the individual profile via API call instead of pulling an individual profile out of the profiles array.
+      would probably want to update this logic to fetch the individual profile via API call (using the :profileId slug in the url) instead of
+      pulling an individual profile out of the profiles array.
+
+      For this particular coding challenge, using the data provided for profiles, the below approach works well.
     */
     const { profiles } = profileContext;
     if (!profiles || !profiles.length) {
@@ -99,7 +98,10 @@ const ProfilePage = (props) => {
     return (
       <>
         <ProfilePageWrapper>
-          <ProfileImage src={`${profile.photoUrl}`} alt="potential date" />
+          <ProfileImage
+            src={`${profile.photoUrl.replace('200/200', '360/360')}`}
+            alt="potential date"
+          />
           <DetailsGrid>
             <ColumnGrid>
               <div>
