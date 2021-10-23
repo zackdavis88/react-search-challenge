@@ -22,9 +22,11 @@
 3. I used [JSONBIN.io](https://jsonbin.io/) to host the JSON API that returns profiles. I found that if you hit one of their free APIs with too many requests they
 shut it down, so if the project is getting a bad response from the API then try updating apiconfig.json with one of these alternative URLS:
 
-  * https://api.jsonbin.io/b/617336169548541c29c72697
-  * https://api.jsonbin.io/b/6172160daa02be1d445cfe0a
-  * https://api.jsonbin.io/b/61721625aa02be1d445cfe13
+  * https://api.jsonbin.io/b/61735d7d9548541c29c735c4
+  * https://api.jsonbin.io/b/61735d884a82881d6c64396b
+  * https://api.jsonbin.io/b/61735da0aa02be1d445d7a99
+
+4. Clicking the Match logo will send you to the homepage (SearchPage)
 
 
 ## Tasks

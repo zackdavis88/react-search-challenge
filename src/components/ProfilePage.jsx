@@ -60,7 +60,7 @@ const ColumnGrid = styled.div`
   }
 `;
 
-const ProfilePage = (props) => {
+const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const profileContext = useContext(ProfileContext);
   const { profileId } = useParams();
@@ -84,7 +84,7 @@ const ProfilePage = (props) => {
     // Hitting this block means we have data in the store.
     const profile = profiles.find((profile) => profile.id === Number(profileId));
     setProfile(profile);
-  }, [profileContext, profileId, profile]);
+  }, [profileContext.profiles]);
 
   const renderContent = () => {
     const { isLoading, error } = profileContext;
@@ -98,10 +98,7 @@ const ProfilePage = (props) => {
     return (
       <>
         <ProfilePageWrapper>
-          <ProfileImage
-            src={`${profile.photoUrl.replace('200/200', '360/360')}`}
-            alt="potential date"
-          />
+          <ProfileImage src={`${profile.photoUrl}`} alt="potential date" />
           <DetailsGrid>
             <ColumnGrid>
               <div>
