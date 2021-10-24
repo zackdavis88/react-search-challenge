@@ -46,7 +46,7 @@ function PokemonReducer(state, action) {
         ...state,
         isLoading: false,
         pokemonArray: [],
-        error: 'Something went wrong while fetching from the API',
+        error: action.message || 'Something went wrong while fetching from the API',
       };
     case SORT_ASCENDING:
       pokemonArray = [...state.pokemonArray];
@@ -71,7 +71,10 @@ function PokemonReducer(state, action) {
         autoRefresh: !state.autoRefresh,
       };
     default:
-      throw new Error();
+      return {
+        ...state,
+        isLoading: false,
+      };
   }
 }
 

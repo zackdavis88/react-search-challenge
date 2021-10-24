@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchPage from './components/SearchPage';
+import ProfilePage from './components/ProfilePage';
 import NotFoundPage from 'components/NotFoundPage';
 import PokemonContextProvider from './components/PokemonContextProvider';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -14,6 +15,9 @@ function App() {
         <Switch>
           <Route path="/" exact>
             <SearchPage />
+          </Route>
+          <Route path="/:pokemonId" exact>
+            <ProfilePage />
           </Route>
           <Route path="*">
             <NotFoundPage />

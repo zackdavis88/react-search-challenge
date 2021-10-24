@@ -6,6 +6,49 @@ import {
 } from './components/PokemonContextProvider';
 import { apiUrl } from './apiconfig.json';
 
+export const getTypeColor = (type) => {
+  switch (type) {
+    case 'bug':
+      return '#a8b820';
+    case 'dark':
+      return '#705848';
+    case 'dragon':
+      return '#7038f8';
+    case 'electric':
+      return '#f8d030';
+    case 'fairy':
+      return '#ee99ac';
+    case 'fighting':
+      return '#c03028';
+    case 'fire':
+      return '#f08030';
+    case 'flying':
+      return '#a890f0';
+    case 'ghost':
+      return '#705898';
+    case 'grass':
+      return '#78c850';
+    case 'ground':
+      return '#e0c068';
+    case 'ice':
+      return '#98d8d8';
+    case 'normal':
+      return '#a8a878';
+    case 'poison':
+      return '#a040a0';
+    case 'psychic':
+      return '#f85888';
+    case 'rock':
+      return '#b8a038';
+    case 'steel':
+      return '#b8b8d0';
+    case 'water':
+      return '#6890f0';
+    default:
+      return '#ffffff';
+  }
+};
+
 export const formatPokemonNumber = (number) => {
   if (number >= 100) return `#${number}`;
 
@@ -13,6 +56,13 @@ export const formatPokemonNumber = (number) => {
   paddedNumber = paddedNumber.slice(paddedNumber.length - 3);
   return `#${paddedNumber}`;
 };
+
+export const fetchPokemonById = (pokemonId) =>
+  new Promise((resolve) => {
+    fetch(`${apiUrl}/pokemon/${pokemonId}`).then((response) => {
+      return resolve(response);
+    });
+  });
 
 export const fetchPokemon = async (pokemonContext, isRefresh = false) => {
   // for a better feeling experience, lets not fire the request action for refreshes.

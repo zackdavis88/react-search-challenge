@@ -1,137 +1,185 @@
-import { useContext, useEffect, useState } from 'react';
-import Header from './Header';
-import { ProfileContext } from './ProfilesContextProvider';
+import { useEffect, useState } from 'react';
 import ErrorBanner from './ErrorBanner';
 import LoadingBanner from './LoadingBanner';
 import { useParams } from 'react-router-dom';
-import { fetchProfiles } from '../utils';
-import styled from 'styled-components';
+import { fetchPokemonById, formatPokemonNumber, getTypeColor } from '../utils';
+import styled, { css } from 'styled-components';
 
-const ProfilePageWrapper = styled.div`
+const MaxWidthContainer = styled.div`
   max-width: 1280px;
-  margin: auto;
-  padding: 24px;
-  display: flex;
-  @media (max-width: 599.95px) {
-    flex-direction: column;
-  }
+  margin: 24px auto 0px auto;
 `;
 
-const ProfileImage = styled.img`
-  min-width: 360px;
-  border: 1px solid lightgray;
-  border-radius: 8px;
-  box-shadow: 0 3px 6px lightgray, 0 3px 6px;
-  @media (max-width: 599.95px) {
+const PokemonImage = styled.img`
+  width: 360px;
+  @media (max-width: 649.95px) {
     max-width: 360px;
     width: 100%;
     min-width: 0;
   }
 `;
 
-const DetailsGrid = styled.div`
-  display: grid;
+const StyledMain = styled.main`
+  position: relative;
+  padding: 32px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #adadad;
+  justify-content: center;
+  -webkit-box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.75);
+`;
+
+const DataRow = styled.div`
+  display: flex;
   width: 100%;
-  padding: 0 0 0 18px;
-  grid-gap: 16px;
-  grid-template-rows: 1fr 1fr;
-  @media (max-width: 599.95px) {
-    padding: 18px 0 0 0;
+  flex-direction: row;
+  margin: 0px 0px 36px 0px;
+  @media (max-width: 850px) {
+    flex-direction: column;
   }
 `;
 
-const DataLabel = styled.label`
-  font-size: 20px;
-  font-weight: 700;
-  color: #8e8e8e;
+const DataColumn = styled.div`
+  width: 100%;
+`;
+
+const DataLabel = styled.div`
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
   text-transform: uppercase;
+  padding: 0px 0px 8px 0px;
 `;
 
 const DataValue = styled.div`
-  font-size: 35px;
+  text-align: center;
+  font-size: 24px;
 `;
 
-const ColumnGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 16px;
-  @media (max-width: 800px) {
-    grid-template-columns: 1fr;
+const PokemonType = styled.div`
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100px;
+  margin: auto;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  ${(props) => {
+    const color = getTypeColor(props.pokeType);
+    return css`
+      background-color: ${color};
+    `;
+  }}
+`;
+
+const SpriteContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  @media (max-width: 400px) {
+    flex-direction: column;
   }
 `;
 
-const ProfilePage = () => {
-  const [profile, setProfile] = useState(null);
-  const profileContext = useContext(ProfileContext);
-  const { profileId } = useParams();
+const Sprite = styled.img`
+  align-self: center;
+`;
+
+const PokemonPage = () => {
+  const [pokemon, setPokemon] = useState(null);
+  const [pageError, setPageError] = useState('');
+  const { pokemonId } = useParams();
 
   useEffect(() => {
-    /* NOTES ON THIS LOGIC
-       
-      This logic makes some assumptions about the profiles data that we are using. It assumes that the data is a complete list of all profiles,
-      if a user is not contained in the array then they do not exist.
+    const getPokemonData = async () => {
+      const response = await fetchPokemonById(pokemonId);
+      if (response.status === 404) {
+        return setPageError('Pokemon not found');
+      }
 
-      In a real world application: this is a bad assumption because the API could be paginated and returning just a subset of all profiles. We
-      would probably want to update this logic to fetch the individual profile via API call (using the :profileId slug in the url) instead of
-      pulling an individual profile out of the profiles array.
+      const result = await response.json();
+      setPokemon({
+        imageUrl: result.sprites?.other?.['official-artwork']?.front_default,
+        name: result.name,
+        number: formatPokemonNumber(pokemonId),
+        types: result.types,
+        sprites: result.sprites,
+      });
+    };
 
-      For this particular coding challenge, using the data provided for profiles, the below approach works well.
-    */
-    const { profiles } = profileContext;
-    if (!profiles || !profiles.length) {
-      return fetchProfiles(profileContext);
-    }
-    // Hitting this block means we have data in the store.
-    const profile = profiles.find((profile) => profile.id === Number(profileId));
-    setProfile(profile);
-  }, [profileContext.profiles]);
+    getPokemonData();
+  }, [pokemonId]);
 
-  const renderContent = () => {
-    const { isLoading, error } = profileContext;
-    if (profile === null || isLoading) return <LoadingBanner />; // check for profile === null because that means we are still initializing the component's state.
-
-    if (error)
-      return <ErrorBanner message={`Something went wrong fetching profile ${profileId}`} />;
-
-    if (!profile) return <ErrorBanner message={'User not found'} />; // profile will be undefined (not null) if we failed to find their ID in the profiles array.
+  const renderSprites = () => {
+    const frontDefault = pokemon.sprites['front_default'];
+    const backDefault = pokemon.sprites['back_default'];
+    const frontShinyDefault = pokemon.sprites['front_shiny'];
+    const backShinyDefault = pokemon.sprites['back_shiny'];
 
     return (
-      <>
-        <ProfilePageWrapper>
-          <ProfileImage src={`${profile.photoUrl}`} alt="potential date" />
-          <DetailsGrid>
-            <ColumnGrid>
-              <div>
-                <DataLabel htmlFor="handle">Handle</DataLabel>
-                <DataValue id="handle">{profile.handle}</DataValue>
-              </div>
-              <div>
-                <DataLabel htmlFor="location">Location</DataLabel>
-                <DataValue id="location">{profile.location}</DataValue>
-              </div>
-            </ColumnGrid>
-            <ColumnGrid>
-              <div>
-                <DataLabel htmlFor="age">Age</DataLabel>
-                <DataValue id="age">{profile.age}</DataValue>
-              </div>
-              <div>
-                <DataLabel htmlFor="photoCount">Photos</DataLabel>
-                <DataValue id="photoCount">{profile.photoCount}</DataValue>
-              </div>
-            </ColumnGrid>
-          </DetailsGrid>
-        </ProfilePageWrapper>
-      </>
+      <SpriteContainer>
+        <Sprite src={frontDefault} alt="front sprite" />
+        <Sprite src={backDefault} alt="back sprite" />
+        <Sprite src={frontShinyDefault} alt="front shiny sprite" />
+        <Sprite src={backShinyDefault} alt="back shiny sprite" />
+      </SpriteContainer>
     );
   };
 
-  return (
-    <>
-      <Header />
-      {renderContent()}
-    </>
-  );
+  const renderContent = () => {
+    if (!pageError && pokemon === null) return <LoadingBanner />; // check for pokemon === null because that means we are still initializing the component's state.
+
+    if (pageError) return <ErrorBanner message={pageError} />;
+
+    return (
+      <MaxWidthContainer>
+        <StyledMain>
+          <PokemonImage src={pokemon.imageUrl} alt="pokemon image" />
+          <DataRow>
+            <DataColumn>
+              <DataLabel>Number</DataLabel>
+              <DataValue>{pokemon.number}</DataValue>
+            </DataColumn>
+            <DataColumn>
+              <DataLabel>Name</DataLabel>
+              <DataValue>{pokemon.name}</DataValue>
+            </DataColumn>
+          </DataRow>
+          <DataRow>
+            <DataColumn>
+              <DataLabel>Types</DataLabel>
+              <DataValue>
+                {pokemon.types?.map(
+                  (item, index) =>
+                    item.type && (
+                      <DataRow key={index}>
+                        <PokemonType pokeType={item.type.name}>{item.type.name}</PokemonType>
+                      </DataRow>
+                    )
+                )}
+              </DataValue>
+            </DataColumn>
+            <DataColumn>
+              <DataLabel>Sprites</DataLabel>
+              <DataValue>{pokemon.sprites ? renderSprites() : null}</DataValue>
+            </DataColumn>
+          </DataRow>
+        </StyledMain>
+      </MaxWidthContainer>
+    );
+  };
+
+  return renderContent();
 };
 
-export default ProfilePage;
+export default PokemonPage;
