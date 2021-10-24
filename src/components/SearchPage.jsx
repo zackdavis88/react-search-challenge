@@ -1,17 +1,17 @@
 import React from 'react';
-import { ProfileContext } from './ProfilesContextProvider';
+import { PokemonContext, SORT_ASCENDING, SORT_DESCENDING } from './PokemonContextProvider';
 import MinimalButton from './MinimalButton';
-import Header from './Header';
 import SearchCard from './SearchCard';
-import { SORT_ASCENDING, SORT_DESCENDING } from './ProfilesContextProvider';
 import ErrorBanner from './ErrorBanner';
 import LoadingBanner from './LoadingBanner';
-import { fetchProfiles } from '../utils';
+import { fetchPokemon } from '../utils';
 import styled from 'styled-components';
-import RefreshTimer from './RefreshTimer';
+// import RefreshTimer from './RefreshTimer';
 
 const StyledMain = styled.main`
-  margin: 24px;
+  padding: 24px;
+  display: block;
+  position: relative;
 `;
 
 const ActionButtonsGroup = styled.div`
@@ -26,10 +26,10 @@ const StyledGrid = styled.div`
   @media (max-width: 1280px) and (min-width: 950px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
-  @media (max-width: 949.95px) and (min-width: 600px) {
+  @media (max-width: 949.95px) and (min-width: 650px) {
     grid-template-columns: 1fr 1fr;
   }
-  @media (max-width: 599.95px) {
+  @media (max-width: 649.95px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -39,12 +39,12 @@ const StyledImage = styled.img`
 `;
 
 class SearchPage extends React.Component {
-  static contextType = ProfileContext;
+  static contextType = PokemonContext;
 
   componentDidMount() {
-    const { profiles = [] } = this.context;
-    if (!profiles || !profiles.length) {
-      fetchProfiles(this.context);
+    const { pokemonArray = [] } = this.context;
+    if (!pokemonArray || !pokemonArray.length) {
+      fetchPokemon(this.context);
     }
   }
 
@@ -57,41 +57,16 @@ class SearchPage extends React.Component {
   };
 
   renderContent = () => {
-    const { profiles = [], isLoading, error } = this.context;
+    const { pokemonArray = [], isLoading, error } = this.context;
     if (isLoading) return <LoadingBanner />;
 
     if (error) return <ErrorBanner message={error} />;
 
     return (
       <StyledMain>
-        <ActionButtonsGroup>
-          <RefreshTimer />
-        </ActionButtonsGroup>
-
-        <ActionButtonsGroup>
-          <MinimalButton disabled>
-            <StyledImage src="filter.svg" alt="filter" />
-          </MinimalButton>
-          <MinimalButton onClick={this.handleSortAscending}>
-            <StyledImage src="./ascending.svg" alt="Sort ascending" />
-          </MinimalButton>
-
-          <MinimalButton onClick={this.handleSortDescending}>
-            <StyledImage src="./descending.svg" alt="Sort descending" />
-          </MinimalButton>
-        </ActionButtonsGroup>
-
         <StyledGrid>
-          {profiles.map((profile, index) => (
-            <SearchCard
-              key={index}
-              profileId={profile.id}
-              photoUrl={profile.photoUrl}
-              handle={profile.handle}
-              location={profile.location}
-              age={profile.age}
-              photoCount={profile.photoCount}
-            />
+          {pokemonArray.map((pokemon, index) => (
+            <SearchCard {...pokemon} key={index} />
           ))}
         </StyledGrid>
       </StyledMain>
@@ -99,12 +74,7 @@ class SearchPage extends React.Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <Header />
-        {this.renderContent()}
-      </React.Fragment>
-    );
+    return <React.Fragment>{this.renderContent()}</React.Fragment>;
   }
 }
 
