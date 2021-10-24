@@ -59,7 +59,13 @@ const DataLabel = styled.div`
 
 const DataValue = styled.div`
   text-align: center;
-  font-size: 24px;
+  font-size: 36px;
+  letter-spacing: 6px;
+  ${(props) =>
+    props.yellow &&
+    css`
+      color: #feca1b;
+    `}
 `;
 
 const PokemonType = styled.div`
@@ -148,7 +154,7 @@ const PokemonPage = () => {
           <DataRow>
             <DataColumn>
               <DataLabel>Number</DataLabel>
-              <DataValue>{pokemon.number}</DataValue>
+              <DataValue yellow>{pokemon.number}</DataValue>
             </DataColumn>
             <DataColumn>
               <DataLabel>Name</DataLabel>
