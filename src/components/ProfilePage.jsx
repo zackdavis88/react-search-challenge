@@ -79,6 +79,7 @@ const PokemonType = styled.div`
   padding: 6px 12px;
   border-radius: 8px;
   border: 1px solid black;
+  letter-spacing: normal;
 
   ${(props) => {
     const color = getTypeColor(props.pokeType);
@@ -109,9 +110,10 @@ const PokemonPage = () => {
   useEffect(() => {
     const getPokemonData = async () => {
       const response = await fetchPokemonById(pokemonId);
-      if (response.status === 404) {
-        return setPageError('Pokemon not found');
-      }
+      if (response.status === 404) return setPageError('Pokemon not found');
+
+      if (response.status !== 200)
+        return setPageError(`API error while retrieving pokemonId ${pokemonId}`);
 
       const result = await response.json();
       setPokemon({
