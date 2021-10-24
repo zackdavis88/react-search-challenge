@@ -1,13 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Wrapper = styled.h2`
-  background-color: red;
+const StyledH2 = styled.h2`
+  text-align: center;
+  padding: 20px;
+  font-size: 30px;
+  display: block;
+  letter-spacing: 6px;
 `;
 
 class ErrorBanner extends React.Component {
   render() {
-    return <Wrapper>{this.props.message}</Wrapper>;
+    return <StyledH2>{this.props.message}</StyledH2>;
   }
 }
 

@@ -8,6 +8,8 @@ const StyledHeader = styled.header`
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
   padding: 16px;
   background-color: #f44336;
+  display: flex;
+  justify-content: center;
 `;
 
 const StyledImage = styled.img`
@@ -20,7 +22,7 @@ export default function Header() {
       <Link to="/">
         <StyledImage
           src="https://cdn2.bulbagarden.net/upload/4/4b/Pok%C3%A9dex_logo.png"
-          alt="pokedex"
+          alt="pokedex logo"
         />
       </Link>
     </StyledHeader>

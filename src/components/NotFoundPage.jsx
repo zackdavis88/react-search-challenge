@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './Header';
 import styled from 'styled-components';
 
 const StyledH2 = styled.h2`
@@ -7,6 +6,7 @@ const StyledH2 = styled.h2`
   padding: 20px;
   font-size: 50px;
   display: block;
+  letter-spacing: 6px;
 `;
 
 const StyledDiv = styled.div`
