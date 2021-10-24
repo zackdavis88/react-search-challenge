@@ -33,6 +33,7 @@ const NameWrapper = styled.div`
   padding: 8px 0px 8px 8px;
   background-color: #000000bf;
   width: 100%;
+  text-transform: capitalize;
 `;
 
 const NumberWrapper = styled.div`

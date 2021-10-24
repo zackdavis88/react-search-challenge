@@ -65,6 +65,13 @@ const DataValue = styled.div`
     props.yellow &&
     css`
       color: #feca1b;
+      text-shadow: 2px 2px 0px #343199;
+    `}
+
+  ${(props) =>
+    props.capitalize &&
+    css`
+      text-transform: capitalize;
     `}
 `;
 
@@ -80,6 +87,9 @@ const PokemonType = styled.div`
   border-radius: 8px;
   border: 1px solid black;
   letter-spacing: normal;
+  -webkit-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.75);
 
   ${(props) => {
     const color = getTypeColor(props.pokeType);
@@ -160,7 +170,9 @@ const PokemonPage = () => {
             </DataColumn>
             <DataColumn>
               <DataLabel>Name</DataLabel>
-              <DataValue>{pokemon.name}</DataValue>
+              <DataValue yellow capitalize>
+                {pokemon.name}
+              </DataValue>
             </DataColumn>
           </DataRow>
           <DataRow>
