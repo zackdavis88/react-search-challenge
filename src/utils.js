@@ -4,7 +4,7 @@ import {
   POKEMON_FAILURE,
   REFRESH_POKEMON,
 } from './components/PokemonContextProvider';
-import { apiUrl } from './apiconfig.json';
+import { apiUrl, lastPokemonNumber } from './appconfig.json';
 
 export const getTypeColor = (type) => {
   switch (type) {
@@ -69,20 +69,28 @@ export const fetchPokemon = async (pokemonContext, isRefresh = false) => {
   if (!isRefresh) {
     pokemonContext.dispatch({ type: POKEMON_REQUESTED });
   }
-  const response = await fetch(`${apiUrl}/pokemon?limit=20`);
+  const { itemsPerPage, page } = pokemonContext;
+  const response = await fetch(
+    `${apiUrl}/pokemon?limit=${itemsPerPage}&offset=${(page - 1) * itemsPerPage}`
+  );
   if (response.status !== 200) return pokemonContext.dispatch({ type: POKEMON_FAILURE });
 
   const body = await response.json();
   const results = body.results;
-  const pokemonArray = results.map((pokemon, index) => {
-    return {
+
+  const pokemonArray = results.reduce((prev, pokemon, index) => {
+    const number = (page - 1) * itemsPerPage + (index + 1);
+    if (number > lastPokemonNumber) return prev;
+
+    return prev.concat({
       ...pokemon,
       imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${
-        index + 1
+        (page - 1) * itemsPerPage + (index + 1)
       }.png`,
-      number: index + 1,
-    };
-  });
+      number: (page - 1) * itemsPerPage + (index + 1),
+    });
+  }, []);
+
   // Fire off a dispatch to populate or refresh the store.
   return pokemonContext.dispatch({
     type: isRefresh ? REFRESH_POKEMON : POKEMON_SUCCESS,

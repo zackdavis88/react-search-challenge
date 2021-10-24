@@ -7,6 +7,8 @@ export const SORT_ASCENDING = 'SORT_ASCENDING';
 export const SORT_DESCENDING = 'SORT_DESCENDING';
 export const TOGGLE_REFRESH = 'TOGGLE_REFRESH';
 export const REFRESH_POKEMON = 'REFRESH_POKEMON';
+export const UPDATE_ITEMS_PER_PAGE = 'UPDATE_ITEMS_PER_PAGE';
+export const UPDATE_PAGE = 'UPDATE_PAGE';
 
 export const PokemonContext = React.createContext({
   isLoading: false,
@@ -14,6 +16,8 @@ export const PokemonContext = React.createContext({
   error: '',
   autoRefresh: false,
   sorted: '',
+  itemsPerPage: 10,
+  page: 1,
 });
 
 function PokemonReducer(state, action) {
@@ -70,6 +74,17 @@ function PokemonReducer(state, action) {
         ...state,
         autoRefresh: !state.autoRefresh,
       };
+    case UPDATE_ITEMS_PER_PAGE:
+      return {
+        ...state,
+        itemsPerPage: action.itemsPerPage,
+        page: action.page,
+      };
+    case UPDATE_PAGE:
+      return {
+        ...state,
+        page: action.page,
+      };
     default:
       return {
         ...state,
@@ -85,6 +100,8 @@ function PokemonContextProvider({ children }) {
     error: '',
     autoRefresh: false,
     sorted: '',
+    itemsPerPage: 10,
+    page: 1,
   });
 
   return (
