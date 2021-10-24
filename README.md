@@ -2,31 +2,12 @@
 
 ## Notes From the Developer
 
-1. This app relies on any public JSON API that can return a response in the following format:
+1. This app uses [PokeAPI](https://pokeapi.co/) to retrieve all data.
 
-```
-{
-  "profiles": [{
-    "photoUrl": STRING,
-    "handle": STRING,
-    "location": STRING,
-    "age": NUMBER,
-    "photoCount": NUMBER,
-    "id": NUMBER
-  }]
-}
-```
+2. I removed sorting from the app completely for this implementation. The reason is because the PokeAPI
+   does not appear to have a way to sort a list of results by name. The API does support pagination, so I added that.
 
-2. You can configure the API url that the application uses by modifying the **_apiconfig.json_** file found in the _src_ directory.
-
-3. I used [JSONBIN.io](https://jsonbin.io/) to host the JSON API that returns profiles. I found that if you hit one of their free APIs with too many requests they
-shut it down, so if the project is getting a bad response from the API then try updating apiconfig.json with one of these alternative URLS:
-
-  * https://api.jsonbin.io/b/61735d7d9548541c29c735c4
-  * https://api.jsonbin.io/b/61735d884a82881d6c64396b
-  * https://api.jsonbin.io/b/61735da0aa02be1d445d7a99
-
-4. Clicking the Match logo will send you to the homepage (SearchPage)
+3. Clicking the Pokedex logo will send you to the homepage (SearchPage)
 
 
 ## Tasks
