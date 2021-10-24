@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ProfileContext, TOGGLE_REFRESH } from './ProfilesContextProvider';
-import { fetchProfiles } from '../utils';
+import { PokemonContext, TOGGLE_REFRESH } from './PokemonContextProvider';
+import { fetchPokemon } from '../utils';
 
 const RefreshTimerText = styled.div`
   margin: 16px;
+  font-family: Arial, Helvetica, sans-serif;
 `;
 
 // Wanted something a little more flashy than a standard checkbox, so I tweaked this example from w3schools:
@@ -51,11 +52,11 @@ const StyledCheckBox = styled.label`
   }
 
   & > input:checked + .slider {
-    background-color: #1927f0;
+    background-color: #313099;
   }
 
   & > input:focus + .slider {
-    box-shadow: 0 0 1px #1927f0;
+    box-shadow: 0 0 1px #313099;
   }
 
   & > input:checked + .slider:before {
@@ -66,8 +67,8 @@ const StyledCheckBox = styled.label`
 `;
 
 const RefreshTimer = () => {
-  const profileContext = useContext(ProfileContext);
-  const { autoRefresh, dispatch } = profileContext;
+  const pokemonContext = useContext(PokemonContext);
+  const { autoRefresh, dispatch } = pokemonContext;
   const [secondsRemaining, setSecondsRemaining] = useState(10);
   const toggleAutoRefresh = () => {
     // lets reset secondsRemaining if we are ON -> OFF.
@@ -80,7 +81,7 @@ const RefreshTimer = () => {
 
     const timer = setTimeout(() => {
       if (secondsRemaining === 1) {
-        fetchProfiles(profileContext, true);
+        fetchPokemon(pokemonContext, true);
         setSecondsRemaining(10);
       } else {
         setSecondsRemaining(secondsRemaining - 1);
@@ -88,7 +89,7 @@ const RefreshTimer = () => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [secondsRemaining, autoRefresh, profileContext]);
+  }, [secondsRemaining, autoRefresh, pokemonContext]);
 
   return (
     <>

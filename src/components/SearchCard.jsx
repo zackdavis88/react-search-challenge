@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { formatPokemonNumber } from '../utils';
 
 const CardWrapper = styled.div`
   display: flex;
@@ -8,100 +9,58 @@ const CardWrapper = styled.div`
   align-items: center;
 `;
 
-const AvatarWrapper = styled.div`
+const CardContentWrapper = styled.div`
   border: 1px solid lightgray;
   border-radius: 8px;
   box-shadow: 0 3px 6px lightgray, 0 3px 6px;
   overflow: hidden;
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 275px;
+  height: 275px;
 `;
 
-const DetailsDiv = styled.div`
+const PokemonImage = styled.img`
+  width: 100%;
+`;
+
+const NameWrapper = styled.div`
   position: absolute;
-  width: 100%;
-  bottom: 0;
-  border-radius: inherit;
-  overflow: hidden;
-`;
-
-const DetailsFlexOutterWrapper = styled.div`
-  margin: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  position: relative;
-`;
-
-const DetailsFlexInnerWrapper = styled.div`
-  color: white;
-  display: flex;
-  flex-direction: column;
+  bottom: 0px;
+  left: 0px;
+  color: #feca1b;
+  font-size: 15px;
+  letter-spacing: 2px;
+  padding: 8px 0px 8px 8px;
+  background-color: #000000bf;
   width: 100%;
 `;
 
-const StyledH6 = styled.h6`
-  font-size: 16px;
+const NumberWrapper = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  color: #feca1b;
+  font-size: 20px;
+  letter-spacing: 2px;
+  background-color: #000000bf;
+  width: 100%;
+  padding: 8px 0px 0px 8px;
 `;
 
-const HandleWrapper = styled.div`
-  display: flex;
-  margin-bottom: 4px;
-  align-items: center;
-`;
-
-const BottomDetailsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-`;
-
-const AgeAndLocationWrapper = styled.div`
-  display: flex;
-  margin-bottom: 4px;
-  align-items: center;
-`;
-
-const PhotoCountWrapper = styled.div`
-  display: inline-block;
-  height: 15px;
-  margin-right: 4px;
-  color: white;
-`;
-
-export default class Search extends React.PureComponent {
+export default class SearchCard extends React.PureComponent {
   render() {
-    const {
-      photoUrl = '',
-      handle = '',
-      location = '',
-      age = 99,
-      photoCount = 0,
-      profileId,
-    } = this.props;
+    const { imageUrl, number, name } = this.props;
 
     return (
       <CardWrapper>
-        <Link to={`/${profileId}`}>
-          <AvatarWrapper>
-            <img src={photoUrl} alt="potential date"></img>
-            <DetailsDiv>
-              <DetailsFlexOutterWrapper>
-                <DetailsFlexInnerWrapper>
-                  <StyledH6>
-                    <HandleWrapper>{handle}</HandleWrapper>
-                  </StyledH6>
-                  <BottomDetailsWrapper>
-                    <AgeAndLocationWrapper>
-                      {location ? `${age} • ${location}` : age}
-                    </AgeAndLocationWrapper>
-                    <PhotoCountWrapper>{photoCount > 1 && `${photoCount}`}</PhotoCountWrapper>
-                  </BottomDetailsWrapper>
-                </DetailsFlexInnerWrapper>
-              </DetailsFlexOutterWrapper>
-            </DetailsDiv>
-          </AvatarWrapper>
+        <Link to={`/${number}`}>
+          <CardContentWrapper>
+            <PokemonImage src={imageUrl} alt="pokemon image" />
+            <NumberWrapper>
+              <div>{formatPokemonNumber(number)}</div>
+            </NumberWrapper>
+            <NameWrapper>{name}</NameWrapper>
+          </CardContentWrapper>
         </Link>
       </CardWrapper>
     );

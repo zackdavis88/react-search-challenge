@@ -1,27 +1,30 @@
 import React from 'react';
 import SearchPage from './components/SearchPage';
 import ProfilePage from './components/ProfilePage';
-import ProfilesContextProvider from './components/ProfilesContextProvider';
+import NotFoundPage from 'components/NotFoundPage';
+import PokemonContextProvider from './components/PokemonContextProvider';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Header from 'components/Header';
 import './styles.css';
 
 function App() {
   return (
-    <ProfilesContextProvider>
+    <PokemonContextProvider>
       <Router>
+        <Header />
         <Switch>
           <Route path="/" exact>
             <SearchPage />
           </Route>
-          <Route path="/:profileId" exact>
+          <Route path="/:pokemonId" exact>
             <ProfilePage />
           </Route>
           <Route path="*">
-            <div>Route Not Found</div>
+            <NotFoundPage />
           </Route>
         </Switch>
       </Router>
-    </ProfilesContextProvider>
+    </PokemonContextProvider>
   );
 }
 
