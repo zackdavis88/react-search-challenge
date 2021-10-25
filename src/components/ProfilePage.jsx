@@ -12,10 +12,8 @@ const MaxWidthContainer = styled.div`
 
 const PokemonImage = styled.img`
   width: 360px;
-  @media (max-width: 649.95px) {
-    max-width: 360px;
-    width: 100%;
-    min-width: 0;
+  @media (max-width: 400px) {
+    width: 275px;
   }
 `;
 
@@ -61,6 +59,9 @@ const DataValue = styled.div`
   text-align: center;
   font-size: 36px;
   letter-spacing: 6px;
+  @media (max-width: 400px) {
+    font-size: 24px;
+  }
   ${(props) =>
     props.yellow &&
     css`
@@ -129,7 +130,7 @@ const PokemonPage = () => {
       setPokemon({
         imageUrl: result.sprites?.other?.['official-artwork']?.front_default,
         name: result.name,
-        number: formatPokemonNumber(pokemonId),
+        number: result.id,
         types: result.types,
         sprites: result.sprites,
       });
@@ -146,10 +147,10 @@ const PokemonPage = () => {
 
     return (
       <SpriteContainer>
-        <Sprite src={frontDefault} alt="front sprite" />
-        <Sprite src={backDefault} alt="back sprite" />
-        <Sprite src={frontShinyDefault} alt="front shiny sprite" />
-        <Sprite src={backShinyDefault} alt="back shiny sprite" />
+        {frontDefault && <Sprite src={frontDefault} alt="front sprite" />}
+        {backDefault && <Sprite src={backDefault} alt="back sprite" />}
+        {frontShinyDefault && <Sprite src={frontShinyDefault} alt="front shiny sprite" />}
+        {backShinyDefault && <Sprite src={backShinyDefault} alt="back shiny sprite" />}
       </SpriteContainer>
     );
   };
@@ -166,7 +167,7 @@ const PokemonPage = () => {
           <DataRow>
             <DataColumn>
               <DataLabel>Number</DataLabel>
-              <DataValue yellow>{pokemon.number}</DataValue>
+              <DataValue yellow>{formatPokemonNumber(pokemon.number)}</DataValue>
             </DataColumn>
             <DataColumn>
               <DataLabel>Name</DataLabel>
