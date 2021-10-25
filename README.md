@@ -4,8 +4,9 @@
 
 1. This app uses [PokeAPI](https://pokeapi.co/) to retrieve all data.
 
-2. I removed sorting from the app completely for this implementation. The reason is because the PokeAPI
-   does not appear to have a way to sort a list of results by name. The API does support pagination, so I added that.
+2. Sorting has limitations: You can alphabetically sort a page's results but the PokeAPI does not appear to have sorting
+   enabled for their API that returns a paginated list of pokemon, according to the documentation.
+   So we can only sort at a page-level not API-level.
 
 3. Clicking the Pokedex logo will send you to the homepage (SearchPage)
 

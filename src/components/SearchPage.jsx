@@ -1,5 +1,11 @@
 import React from 'react';
-import { PokemonContext, UPDATE_ITEMS_PER_PAGE, UPDATE_PAGE } from './PokemonContextProvider';
+import {
+  PokemonContext,
+  UPDATE_ITEMS_PER_PAGE,
+  UPDATE_PAGE,
+  SORT_ASCENDING,
+  SORT_DESCENDING,
+} from './PokemonContextProvider';
 import SearchCard from './SearchCard';
 import ErrorBanner from './ErrorBanner';
 import LoadingBanner from './LoadingBanner';
@@ -7,6 +13,7 @@ import { fetchPokemon } from '../utils';
 import styled from 'styled-components';
 import RefreshTimer from './RefreshTimer';
 import { lastPokemonNumber } from '../appconfig.json';
+import MinimalButton from './MinimalButton';
 
 const StyledMain = styled.main`
   padding: 24px;
@@ -69,6 +76,10 @@ const FlexDiv = styled.div`
   }
 `;
 
+const ButtonImage = styled.img`
+  width: 22px;
+`;
+
 class SearchPage extends React.Component {
   static contextType = PokemonContext;
 
@@ -82,13 +93,13 @@ class SearchPage extends React.Component {
   handlePageForward = () => {
     const { page } = this.context;
     this.context.dispatch({ type: UPDATE_PAGE, page: page + 1 });
-    fetchPokemon({ ...this.context, page: page + 1 });
+    fetchPokemon({ ...this.context, page: page + 1 }, true);
   };
 
   handlePageBack = () => {
     const { page } = this.context;
     this.context.dispatch({ type: UPDATE_PAGE, page: page - 1 });
-    fetchPokemon({ ...this.context, page: page - 1 });
+    fetchPokemon({ ...this.context, page: page - 1 }, true);
   };
 
   handleCountChange = (event) => {
@@ -101,9 +112,18 @@ class SearchPage extends React.Component {
     fetchPokemon({ ...this.context, itemsPerPage: event.target.value, page: 1 });
   };
 
+  handleSortAscending = () => {
+    this.context.dispatch({ type: SORT_ASCENDING });
+  };
+
+  handleSortDescending = () => {
+    this.context.dispatch({ type: SORT_DESCENDING });
+  };
+
   checkPrevDisabled = () => {
     const { pokemonArray = [] } = this.context;
-    if (pokemonArray[0] && pokemonArray[0].number === 1) return true;
+    const result = pokemonArray.some((pokemon) => pokemon.number === 1);
+    if (result) return true;
     return false;
   };
 
@@ -147,6 +167,14 @@ class SearchPage extends React.Component {
             <PaginationButton disabled={this.checkNextDisabled()} onClick={this.handlePageForward}>
               Next Page
             </PaginationButton>
+          </FlexDiv>
+          <FlexDiv>
+            <MinimalButton onClick={this.handleSortAscending}>
+              <ButtonImage src="./ascending.svg" alt="Sort ascending" />
+            </MinimalButton>
+            <MinimalButton onClick={this.handleSortDescending}>
+              <ButtonImage src="./descending.svg" alt="Sort descending" />
+            </MinimalButton>
           </FlexDiv>
         </ActionButtonsGroup>
         <StyledGrid>
